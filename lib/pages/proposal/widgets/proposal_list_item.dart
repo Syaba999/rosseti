@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:rosseti/models/proposal.dart';
 
@@ -9,30 +11,31 @@ class ProposalListItem extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => onTap(proposal),
-      child: Card(
-        elevation: 8,
+    print(jsonEncode(proposal));
+    return Card(
+      elevation: 8,
+      child: InkWell(
+        onTap: () => onTap(proposal),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                proposal.createdDate,
+                proposal.dateFormat,
                 style: Theme.of(context).textTheme.caption,
               ),
               SizedBox(
                 height: 8,
               ),
               Text(
-                "${proposal.company}",
+                "${proposal.company.name}",
                 style: Theme.of(context)
                     .textTheme
                     .caption
                     .copyWith(color: Theme.of(context).primaryColor),
               ),
-              Text("${proposal.category}"),
+              Text("${proposal.category.title}"),
               Text(
                 proposal.title,
                 style: Theme.of(context).textTheme.headline6,
@@ -51,7 +54,7 @@ class ProposalListItem extends StatelessWidget {
                       child: Wrap(
                     children: proposal.users
                         .map((e) => Text(
-                              "$e, ",
+                              "${e.fullName}, ",
                               style: Theme.of(context).textTheme.caption,
                             ))
                         .toList(),

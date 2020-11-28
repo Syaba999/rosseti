@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rosseti/config/routes_val.dart';
-import 'package:rosseti/models/proposal.dart';
+import 'package:rosseti/models/direction.dart';
+import 'package:rosseti/pages/chat/new_theme_page.dart';
+import 'package:rosseti/pages/chat/theme_list_page.dart';
+import 'package:rosseti/pages/chat/theme_page.dart';
 import 'package:rosseti/pages/home/home_page.dart';
 import 'package:rosseti/pages/loading/loading_page.dart';
 import 'package:rosseti/pages/login/login_page.dart';
@@ -21,10 +24,28 @@ abstract class Routes {
       case userInfoPageRoute:
         return _materialPageRoute(UserInfoPage());
       case newProposalPageRoute:
-        return _materialPageRoute(NewProposalPage());
+        final lastId = settings.arguments as String;
+        return _materialPageRoute(NewProposalPage(
+          lastId: lastId,
+        ));
       case proposalPageRoute:
-        final proposal = settings.arguments as Proposal;
-        return _materialPageRoute(ProposalPage(proposal: proposal));
+        final id = settings.arguments as String;
+        return _materialPageRoute(ProposalPage(id: id));
+      case themeListPageRoute:
+        final direction = settings.arguments as Direction;
+        return _materialPageRoute(ThemeListPage(
+          direction: direction,
+        ));
+      case themePageRoute:
+        final id = settings.arguments as String;
+        return _materialPageRoute(ThemePage(
+          themeId: id,
+        ));
+      case newThemePageRoute:
+        final direction = settings.arguments as Direction;
+        return _materialPageRoute(NewThemePage(
+          direction: direction,
+        ));
       default:
         return null;
     }

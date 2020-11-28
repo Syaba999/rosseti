@@ -2,14 +2,14 @@ import 'package:graphql/client.dart';
 
 import 'urls.dart';
 
-class ApiClient {
+class ApiAuthClient {
   final GraphQLClient client;
 
-  ApiClient(this.client);
+  ApiAuthClient(this.client);
 
-  factory ApiClient.init() {
+  factory ApiAuthClient.init() {
     HttpLink _httpLink = HttpLink(
-      uri: apiUrl,
+      uri: apiAuthUrl,
     );
 
     AuthLink _authLink = AuthLink(
@@ -23,6 +23,6 @@ class ApiClient {
       link: _link,
     );
 
-    return ApiClient(_client);
+    return ApiAuthClient(_client);
   }
 }

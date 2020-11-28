@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:mobx_provider/mobx_provider.dart';
-import 'package:rosseti/models/proposal.dart';
 import 'package:rosseti/pages/proposal/widgets/proposal_info.dart';
 import 'package:rosseti/widgets/loading.dart';
 
 import 'mobx/proposal_store.dart';
 
 class ProposalPage extends StatelessWidget {
-  final Proposal proposal;
+  final String id;
 
-  const ProposalPage({Key key, this.proposal}) : super(key: key);
+  const ProposalPage({Key key, this.id}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MobxStatefulObserver<ProposalStore>(
       builder: _scaffold,
       store: ProposalStore(),
-      initFunction: (store) => store.init(),
+      initFunction: (store) => store.init(id),
     );
   }
 
@@ -36,17 +35,19 @@ class ProposalPage extends StatelessWidget {
       child: Column(
         children: [
           ProposalInfo(
-            proposal: proposal,
+            proposal: store.proposal,
           ),
-          _buildCard(context, "Описание проблемы", Text(proposal.problemText)),
-          _buildCard(context, "Описание решения", Text(proposal.solutionText)),
           _buildCard(
-              context, "Положительный эффект", Text(proposal.positiveText)),
+              context, "Описание проблемы", Text(store.proposal.problemText)),
+          _buildCard(
+              context, "Описание решения", Text(store.proposal.solutionText)),
+          _buildCard(context, "Положительный эффект",
+              Text(store.proposal.positiveText)),
           _buildCard(
               context,
               "Необходимые затраты",
               ListView.builder(
-                itemCount: proposal.necessaryCosts.length,
+                itemCount: store.proposal.necessaryCosts.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) => Column(
@@ -57,7 +58,7 @@ class ProposalPage extends StatelessWidget {
                         height: 8,
                       ),
                     Text(
-                        "${proposal.necessaryCosts[index].id} ${proposal.necessaryCosts[index].name} - ${proposal.necessaryCosts[index].text}"),
+                        "${store.proposal.necessaryCosts[index].number} ${store.proposal.necessaryCosts[index].costItem} - ${store.proposal.necessaryCosts[index].sum} руб."),
                     Divider(),
                   ],
                 ),
@@ -66,7 +67,7 @@ class ProposalPage extends StatelessWidget {
               context,
               "Сроки на внедрение",
               ListView.builder(
-                itemCount: proposal.requiredTerms.length,
+                itemCount: store.proposal.requiredTerms.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) => Column(
@@ -77,7 +78,7 @@ class ProposalPage extends StatelessWidget {
                         height: 8,
                       ),
                     Text(
-                        "${proposal.requiredTerms[index].id} ${proposal.requiredTerms[index].name} - ${proposal.requiredTerms[index].text}"),
+                        "${store.proposal.requiredTerms[index].number} ${store.proposal.requiredTerms[index].name} - ${store.proposal.requiredTerms[index].days} дней"),
                     Divider(),
                   ],
                 ),

@@ -18,20 +18,20 @@ class ProposalInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                proposal.createdDate,
+                proposal.dateFormat,
                 style: Theme.of(context).textTheme.caption,
               ),
               SizedBox(
                 height: 8,
               ),
               Text(
-                "${proposal.company}",
+                "${proposal.company.name}",
                 style: Theme.of(context)
                     .textTheme
                     .caption
                     .copyWith(color: Theme.of(context).primaryColor),
               ),
-              Text("${proposal.category}"),
+              Text("${proposal.category.title}"),
               Text(
                 proposal.title,
                 style: Theme.of(context).textTheme.headline6,

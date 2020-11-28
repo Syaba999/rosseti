@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:mobx_provider/mobx_provider.dart';
+import 'package:rosseti/api/requests.dart';
+import 'package:rosseti/models/category.dart';
 import 'package:rosseti/models/proposal.dart';
+import 'package:rosseti/pages/proposal/mobx/proposal_list_store.dart';
 import 'package:rosseti/services/injector_service.dart';
 import 'package:rosseti/services/navigator_service.dart';
-import 'package:rosseti/store/data_store.dart';
+import 'package:rosseti/store/user_store.dart';
 
 part 'new_proposal_store.g.dart';
 
@@ -14,7 +17,8 @@ class NewProposalStore = _NewProposalStore with _$NewProposalStore;
 abstract class _NewProposalStore extends MobxBase with Store {
   final _navigator =
       InjectorService.getInjector.get<NavigatorService>().navigator;
-  final _dataStore = InjectorService.getInjector.get<DataStore>();
+  final _userStore = InjectorService.getInjector.get<UserStore>();
+  String lastId;
 
   @override
   void dispose() {}
@@ -31,6 +35,26 @@ abstract class _NewProposalStore extends MobxBase with Store {
   TextEditingController rewardPercentController;
 
   @observable
+  bool showCost = false;
+
+  @observable
+  bool showTerm = false;
+
+  @observable
+  bool createsSavings = false;
+
+  @action
+  void toggleCreatesSavings() {
+    createsSavings = !createsSavings;
+  }
+
+  @action
+  void toggleCost() => showCost = !showCost;
+
+  @action
+  void toggleTerm() => showTerm = !showTerm;
+
+  @observable
   String selectedCategory;
 
   @action
@@ -38,47 +62,47 @@ abstract class _NewProposalStore extends MobxBase with Store {
     selectedCategory = category;
   }
 
-  List<String> get categories => _dataStore.categories;
+  List<Category> categories;
 
   @observable
-  List<ProposalRow> necessaryCostList = List();
+  List<NecessaryCost> necessaryCostList = List();
 
   @observable
-  List<ProposalRow> requiredTermList = List();
+  List<RequiredTerm> requiredTermList = List();
 
   @observable
   List<UserRewards> usersRewardList = List();
 
   @action
-  void removeCost(ProposalRow row) {
+  void removeCost(NecessaryCost row) {
     necessaryCostList = List.from(necessaryCostList)..remove(row);
   }
 
   @action
   void addCost() {
-    final row = ProposalRow(
-        necessaryCostList.isNotEmpty ? necessaryCostList.last.id + 1 : 1,
-        costNameController.text,
-        costTextController.text);
+    //final row = NecessaryCost(
+    //    necessaryCostList.isNotEmpty ? necessaryCostList.last.id + 1 : 1,
+    //    costNameController.text,
+    //    costTextController.text);
     costNameController.clear();
     costTextController.clear();
-    necessaryCostList = List.from(necessaryCostList)..add(row);
+    //necessaryCostList = List.from(necessaryCostList)..add(row);
   }
 
   @action
-  void removeTerm(ProposalRow row) {
+  void removeTerm(RequiredTerm row) {
     requiredTermList = List.from(requiredTermList)..remove(row);
   }
 
   @action
   void addTerm() {
-    final row = ProposalRow(
-        requiredTermList.isNotEmpty ? requiredTermList.last.id + 1 : 1,
-        termNameController.text,
-        termTextController.text);
+    //final row = ProposalRow(
+    //    requiredTermList.isNotEmpty ? requiredTermList.last.id + 1 : 1,
+    //    termNameController.text,
+    //    termTextController.text);
     termNameController.clear();
     termTextController.clear();
-    requiredTermList = List.from(requiredTermList)..add(row);
+    //requiredTermList = List.from(requiredTermList)..add(row);
   }
 
   @action
@@ -88,35 +112,39 @@ abstract class _NewProposalStore extends MobxBase with Store {
 
   @action
   void addReward() {
-    final reward = UserRewards(
-        rewardNameController.text, int.parse(rewardPercentController.text));
+    //final reward = UserRewards(
+    //    rewardNameController.text, int.parse(rewardPercentController.text));
     rewardNameController.clear();
     rewardPercentController.clear();
-    usersRewardList = List.from(usersRewardList)..add(reward);
+    //usersRewardList = List.from(usersRewardList)..add(reward);
   }
 
-  @action
-  void saveProposal() {
-    final proposal = Proposal(
-      id: _dataStore.proposalList.last.id + 1,
-      createdDate: DateTime.now().toString(),
-      company: "ПАО «РОССЕТИ ВОЛГА»",
-      users: usersRewardList.map((e) => e.userName).toList(),
-      title: titleController.text,
-      category: selectedCategory,
-      problemText: problemController.text,
-      solutionText: solutionController.text,
-      positiveText: positiveController.text,
-      necessaryCosts: necessaryCostList,
-      requiredTerms: requiredTermList,
-      usersRewards: usersRewardList,
-    );
-    _dataStore.addProposal(proposal);
-    _navigator.pop();
-  }
-
-  void init() async {
+  void saveProposal() async {
+    print("SAVE");
     toLoadingState();
+    try {
+      final proposal = await ApiRequests.createProposal(
+          titleController.text,
+          "${DateTime.now().year}-${_userStore.getUser.company.number}-${int.parse(lastId) + 1}",
+          _userStore.getUser.company.id,
+          selectedCategory,
+          [_userStore.getUser.id],
+          problemController.text,
+          solutionController.text,
+          positiveController.text,
+          createsSavings);
+      InjectorService.getInjector
+          .get<ProposalListStore>()
+          .addProposal(proposal);
+      _navigator.pop();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  void init(String lastId) async {
+    toLoadingState();
+    this.lastId = lastId;
     await Future.delayed(Duration(seconds: 1));
     titleController = TextEditingController();
     problemController = TextEditingController();
@@ -128,7 +156,12 @@ abstract class _NewProposalStore extends MobxBase with Store {
     termTextController = TextEditingController();
     rewardNameController = TextEditingController();
     rewardPercentController = TextEditingController();
-    toSuccessState();
+    try {
+      categories = await ApiRequests.fetchCategories();
+      toSuccessState();
+    } catch (error) {
+      print(error);
+    }
   }
 
   void showModal(String title, String text) {

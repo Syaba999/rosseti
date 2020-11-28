@@ -5,12 +5,15 @@ import 'package:rosseti/pages/proposal/mobx/new_proposal_store.dart';
 import 'package:rosseti/widgets/loading.dart';
 
 class NewProposalPage extends StatelessWidget {
+  final String lastId;
+
+  const NewProposalPage({Key key, this.lastId}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MobxStatefulObserver<NewProposalStore>(
       builder: _scaffold,
       store: NewProposalStore(),
-      initFunction: (store) => store.init(),
+      initFunction: (store) => store.init(lastId),
     );
   }
 
@@ -39,7 +42,7 @@ class NewProposalPage extends StatelessWidget {
                   TextField(
                     controller: store.titleController,
                     decoration: InputDecoration(
-                        labelText: "Название предложения",
+                        labelText: "Название предложения*",
                         suffixIcon: IconButton(
                           onPressed: () => store.showModal(
                               "Название предложения",
@@ -57,7 +60,7 @@ class NewProposalPage extends StatelessWidget {
                     maxLines: 10,
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
-                        labelText: "Опишите проблему",
+                        labelText: "Опишите проблему*",
                         suffixIcon: IconButton(
                           onPressed: () => store.showModal("Опишите проблему",
                               "характеристика проблемы, которую решает рационализаторское предложение, должна описывать недостатки действующей конструкции изделия, технологии производства, применяемой техники или состава материала"),
@@ -70,7 +73,7 @@ class NewProposalPage extends StatelessWidget {
                     maxLines: 10,
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
-                        labelText: "Опишите решение",
+                        labelText: "Опишите решение*",
                         suffixIcon: IconButton(
                           onPressed: () => store.showModal("Опишите решение",
                               "описание предлагаемого решения должно раскрывать в степени, необходимой для его практического осуществления, конструкцию, технические характеристики и другие существенные признаки предлагаемого к внедрению продукта. Прилагаются спецификации, чертежи, рисунки, фото, руководство по монтажу и наладке, руководство пользователя, дистрибутив и др. документы "),
@@ -83,7 +86,7 @@ class NewProposalPage extends StatelessWidget {
                     maxLines: 10,
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
-                        labelText: "Ожидаемый положительный эффект",
+                        labelText: "Ожидаемый положительный эффект*",
                         suffixIcon: IconButton(
                           onPressed: () => store.showModal(
                               "Ожидаемый положительный эффект",
@@ -91,136 +94,212 @@ class NewProposalPage extends StatelessWidget {
                           icon: Icon(Icons.info_outline),
                         )),
                   ),
-                ],
-              ),
-            ),
-          ),
-          Card(
-            elevation: 8,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Необходимые затраты на внедрение"),
-                  for (var row in store.necessaryCostList)
-                    Row(
-                      children: [
-                        Text("${row.id}"),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: Text(row.name),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: Text(row.text),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.remove),
-                          onPressed: () => store.removeCost(row),
-                        )
-                      ],
+                  InkWell(
+                    onTap: store.toggleCreatesSavings,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: Checkbox(
+                              value: store.createsSavings,
+                              onChanged: (value) =>
+                                  store.toggleCreatesSavings(),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Expanded(
+                            child: Text("Предложение создает экономию?*"),
+                          )
+                        ],
+                      ),
                     ),
-                  Row(
-                    children: [
-                      Text(
-                          "${store.necessaryCostList.isNotEmpty ? store.necessaryCostList.last.id + 1 : 1}"),
-                      SizedBox(
-                        width: 8,
+                  ),
+                  InkWell(
+                    onTap: store.toggleCost,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: Checkbox(
+                              value: store.showCost,
+                              onChanged: (value) => store.toggleCost(),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Expanded(
+                            child: Text("Указать затраты"),
+                          )
+                        ],
                       ),
-                      Expanded(
-                        child: TextField(
-                          controller: store.costNameController,
-                          decoration:
-                              InputDecoration(labelText: "Статья затрат"),
-                        ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: store.toggleTerm,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: Checkbox(
+                              value: store.showTerm,
+                              onChanged: (value) => store.toggleTerm(),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Expanded(
+                            child: Text("Указать сроки"),
+                          )
+                        ],
                       ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: TextField(
-                          controller: store.costTextController,
-                          decoration: InputDecoration(labelText: "Сумма"),
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: store.addCost,
-                      )
-                    ],
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          Card(
-            elevation: 8,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Требуемые сроки на внедрение"),
-                  for (var row in store.requiredTermList)
+          if (store.showCost)
+            Card(
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Необходимые затраты на внедрение"),
+                    for (var row in store.necessaryCostList)
+                      Row(
+                        children: [
+                          Text("${row.id}"),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          //Expanded(
+                          //  child: Text(row.name),
+                          //),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          //Expanded(
+                          //  child: Text(row.text),
+                          //),
+                          IconButton(
+                            icon: Icon(Icons.remove),
+                            onPressed: () => store.removeCost(row),
+                          )
+                        ],
+                      ),
                     Row(
                       children: [
-                        Text("${row.id}"),
+                        //Text(
+                        //    "${store.necessaryCostList.isNotEmpty ? store.necessaryCostList.last.id + 1 : 1}"),
                         SizedBox(
                           width: 8,
                         ),
                         Expanded(
-                          child: Text(row.name),
+                          child: TextField(
+                            controller: store.costNameController,
+                            decoration:
+                                InputDecoration(labelText: "Статья затрат"),
+                          ),
                         ),
                         SizedBox(
                           width: 8,
                         ),
                         Expanded(
-                          child: Text(row.text),
+                          child: TextField(
+                            controller: store.costTextController,
+                            decoration: InputDecoration(labelText: "Сумма"),
+                          ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.remove),
-                          onPressed: () => store.removeTerm(row),
+                          icon: Icon(Icons.add),
+                          onPressed: store.addCost,
                         )
                       ],
                     ),
-                  Row(
-                    children: [
-                      Text(
-                          "${store.requiredTermList.isNotEmpty ? store.requiredTermList.last.id + 1 : 1}"),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: TextField(
-                          controller: store.termNameController,
-                          decoration:
-                              InputDecoration(labelText: "Название этапа"),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: TextField(
-                          controller: store.termTextController,
-                          decoration: InputDecoration(labelText: "Срок, дней"),
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: store.addTerm,
-                      )
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
+          if (store.showTerm)
+            Card(
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Требуемые сроки на внедрение"),
+                    for (var row in store.requiredTermList)
+                      Row(
+                        children: [
+                          Text("${row.id}"),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Expanded(
+                            child: Text(row.name),
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          //Expanded(
+                          //  child: Text(row.text),
+                          //),
+                          IconButton(
+                            icon: Icon(Icons.remove),
+                            onPressed: () => store.removeTerm(row),
+                          )
+                        ],
+                      ),
+                    Row(
+                      children: [
+                        //Text(
+                        //    "${store.requiredTermList.isNotEmpty ? store.requiredTermList.last.id + 1 : 1}"),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: TextField(
+                            controller: store.termNameController,
+                            decoration:
+                                InputDecoration(labelText: "Название этапа"),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: TextField(
+                            controller: store.termTextController,
+                            decoration:
+                                InputDecoration(labelText: "Срок, дней"),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: store.addTerm,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
           Card(
             elevation: 8,
             child: Padding(
@@ -228,17 +307,17 @@ class NewProposalPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Укажите авторов"),
+                  Text("Укажите авторов*"),
                   for (var row in store.usersRewardList)
                     Row(
                       children: [
-                        Expanded(
-                          child: Text(row.userName),
-                        ),
+                        //Expanded(
+                        //  child: Text(row.userName),
+                        //),
                         SizedBox(
                           width: 8,
                         ),
-                        Text("${row.userPercents}"),
+                        //Text("${row.userPercents}"),
                         IconButton(
                           icon: Icon(Icons.remove),
                           onPressed: () => store.removeReward(row),
@@ -273,9 +352,13 @@ class NewProposalPage extends StatelessWidget {
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("* - поля, обязательные для заполнения"),
+          ),
           RaisedButton(
             child: Text("Сохранить"),
-            onPressed: () => store.saveProposal,
+            onPressed: store.saveProposal,
           )
         ],
       ),
@@ -286,14 +369,14 @@ class NewProposalPage extends StatelessWidget {
     return DropDownFormField(
       filled: false,
       contentPadding: const EdgeInsets.all(0),
-      titleText: 'Категория',
+      titleText: 'Категория*',
       hintText: 'Выберите категорию',
       value: store.selectedCategory,
       onChanged: store.changeCategory,
       dataSource: store.categories
           .map((e) => {
-                "display": e,
-                "value": e,
+                "display": e.title,
+                "value": e.id,
               })
           .toList(),
       textField: 'display',

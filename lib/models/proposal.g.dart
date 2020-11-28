@@ -8,75 +8,109 @@ part of 'proposal.dart';
 
 Proposal _$ProposalFromJson(Map<String, dynamic> json) {
   return Proposal(
-    id: json['id'] as int,
+    id: json['id'] as String,
     number: json['number'] as String,
-    createdDate: json['created_date'] as String,
-    company: json['company'] as String,
-    users: (json['users'] as List)?.map((e) => e as String)?.toList(),
+    createdAt: json['createdAt'] as String,
+    company: json['company'] == null
+        ? null
+        : Company.fromJson(json['company'] as Map<String, dynamic>),
+    users: (json['users'] as List)
+        ?.map(
+            (e) => e == null ? null : User.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     title: json['title'] as String,
-    category: json['category'] as String,
-    problemText: json['problem_text'] as String,
-    solutionText: json['solution_text'] as String,
-    positiveText: json['positive_text'] as String,
-    necessaryCosts: (json['necessary_costs'] as List)
-        ?.map((e) =>
-            e == null ? null : ProposalRow.fromJson(e as Map<String, dynamic>))
+    category: json['category'] == null
+        ? null
+        : Category.fromJson(json['category'] as Map<String, dynamic>),
+    problemText: json['problemText'] as String,
+    solutionText: json['solutionText'] as String,
+    positiveText: json['positiveText'] as String,
+    necessaryCosts: (json['necessaryCosts'] as List)
+        ?.map((e) => e == null
+            ? null
+            : NecessaryCost.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    requiredTerms: (json['required_terms'] as List)
+    requiredTerms: (json['requiredTerms'] as List)
         ?.map((e) =>
-            e == null ? null : ProposalRow.fromJson(e as Map<String, dynamic>))
+            e == null ? null : RequiredTerm.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    usersRewards: (json['users_rewards'] as List)
+    usersRewards: (json['usersRewards'] as List)
         ?.map((e) =>
             e == null ? null : UserRewards.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    createsSavings: json['creates_savings'] as bool,
-    documents: (json['documents'] as List)?.map((e) => e as String)?.toList(),
+    createsSavings: json['createsSavings'] as bool,
+    documents: (json['documents'] as List)
+        ?.map((e) =>
+            e == null ? null : Document.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
 Map<String, dynamic> _$ProposalToJson(Proposal instance) => <String, dynamic>{
       'id': instance.id,
-      'number': instance.number,
-      'created_date': instance.createdDate,
-      'company': instance.company,
-      'users': instance.users,
-      'title': instance.title,
       'category': instance.category,
-      'problem_text': instance.problemText,
-      'solution_text': instance.solutionText,
-      'positive_text': instance.positiveText,
-      'necessary_costs': instance.necessaryCosts,
-      'required_terms': instance.requiredTerms,
-      'users_rewards': instance.usersRewards,
-      'creates_savings': instance.createsSavings,
+      'company': instance.company,
+      'createdAt': instance.createdAt,
+      'createsSavings': instance.createsSavings,
       'documents': instance.documents,
+      'number': instance.number,
+      'positiveText': instance.positiveText,
+      'problemText': instance.problemText,
+      'solutionText': instance.solutionText,
+      'necessaryCosts': instance.necessaryCosts,
+      'requiredTerms': instance.requiredTerms,
+      'title': instance.title,
+      'users': instance.users,
+      'usersRewards': instance.usersRewards,
     };
 
-ProposalRow _$ProposalRowFromJson(Map<String, dynamic> json) {
-  return ProposalRow(
-    json['id'] as int,
-    json['name'] as String,
-    json['text'] as String,
+NecessaryCost _$NecessaryCostFromJson(Map<String, dynamic> json) {
+  return NecessaryCost(
+    json['id'] as String,
+    json['costItem'] as String,
+    json['number'] as int,
+    (json['sum'] as num)?.toDouble(),
   );
 }
 
-Map<String, dynamic> _$ProposalRowToJson(ProposalRow instance) =>
+Map<String, dynamic> _$NecessaryCostToJson(NecessaryCost instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'costItem': instance.costItem,
+      'number': instance.number,
+      'sum': instance.sum,
+    };
+
+RequiredTerm _$RequiredTermFromJson(Map<String, dynamic> json) {
+  return RequiredTerm(
+    json['id'] as String,
+    json['days'] as int,
+    json['name'] as String,
+    json['number'] as int,
+  );
+}
+
+Map<String, dynamic> _$RequiredTermToJson(RequiredTerm instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'days': instance.days,
       'name': instance.name,
-      'text': instance.text,
+      'number': instance.number,
     };
 
 UserRewards _$UserRewardsFromJson(Map<String, dynamic> json) {
   return UserRewards(
-    json['userName'] as String,
-    json['userPercents'] as int,
+    json['user'] == null
+        ? null
+        : User.fromJson(json['user'] as Map<String, dynamic>),
+    json['count'] as int,
+    json['id'] as String,
   );
 }
 
 Map<String, dynamic> _$UserRewardsToJson(UserRewards instance) =>
     <String, dynamic>{
-      'userName': instance.userName,
-      'userPercents': instance.userPercents,
+      'id': instance.id,
+      'count': instance.count,
+      'user': instance.user,
     };

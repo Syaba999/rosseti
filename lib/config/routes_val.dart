@@ -4,3 +4,6 @@ const String loginPageRoute = "/loginPageRoute";
 const String userInfoPageRoute = "/userInfoPageRoute";
 const String newProposalPageRoute = "/newProposalPageRoute";
 const String proposalPageRoute = "/proposalPageRoute";
+const String themeListPageRoute = "/themeListPageRoute";
+const String themePageRoute = "/themePageRoute";
+const String newThemePageRoute = "/newThemePageRoute";

@@ -40,6 +40,12 @@ class LoginPage extends StatelessWidget {
                                 "Вход",
                                 style: Theme.of(context).textTheme.headline6,
                               ),
+                              if (store.isError)
+                                Text(
+                                  store.errors.join('\n'),
+                                  style: TextStyle(
+                                      color: Theme.of(context).errorColor),
+                                ),
                               TextField(
                                 controller: store.mailController,
                                 decoration:

@@ -9,6 +9,51 @@ part of 'new_proposal_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$NewProposalStore on _NewProposalStore, Store {
+  final _$showCostAtom = Atom(name: '_NewProposalStore.showCost');
+
+  @override
+  bool get showCost {
+    _$showCostAtom.reportRead();
+    return super.showCost;
+  }
+
+  @override
+  set showCost(bool value) {
+    _$showCostAtom.reportWrite(value, super.showCost, () {
+      super.showCost = value;
+    });
+  }
+
+  final _$showTermAtom = Atom(name: '_NewProposalStore.showTerm');
+
+  @override
+  bool get showTerm {
+    _$showTermAtom.reportRead();
+    return super.showTerm;
+  }
+
+  @override
+  set showTerm(bool value) {
+    _$showTermAtom.reportWrite(value, super.showTerm, () {
+      super.showTerm = value;
+    });
+  }
+
+  final _$createsSavingsAtom = Atom(name: '_NewProposalStore.createsSavings');
+
+  @override
+  bool get createsSavings {
+    _$createsSavingsAtom.reportRead();
+    return super.createsSavings;
+  }
+
+  @override
+  set createsSavings(bool value) {
+    _$createsSavingsAtom.reportWrite(value, super.createsSavings, () {
+      super.createsSavings = value;
+    });
+  }
+
   final _$selectedCategoryAtom =
       Atom(name: '_NewProposalStore.selectedCategory');
 
@@ -29,13 +74,13 @@ mixin _$NewProposalStore on _NewProposalStore, Store {
       Atom(name: '_NewProposalStore.necessaryCostList');
 
   @override
-  List<ProposalRow> get necessaryCostList {
+  List<NecessaryCost> get necessaryCostList {
     _$necessaryCostListAtom.reportRead();
     return super.necessaryCostList;
   }
 
   @override
-  set necessaryCostList(List<ProposalRow> value) {
+  set necessaryCostList(List<NecessaryCost> value) {
     _$necessaryCostListAtom.reportWrite(value, super.necessaryCostList, () {
       super.necessaryCostList = value;
     });
@@ -45,13 +90,13 @@ mixin _$NewProposalStore on _NewProposalStore, Store {
       Atom(name: '_NewProposalStore.requiredTermList');
 
   @override
-  List<ProposalRow> get requiredTermList {
+  List<RequiredTerm> get requiredTermList {
     _$requiredTermListAtom.reportRead();
     return super.requiredTermList;
   }
 
   @override
-  set requiredTermList(List<ProposalRow> value) {
+  set requiredTermList(List<RequiredTerm> value) {
     _$requiredTermListAtom.reportWrite(value, super.requiredTermList, () {
       super.requiredTermList = value;
     });
@@ -76,6 +121,39 @@ mixin _$NewProposalStore on _NewProposalStore, Store {
       ActionController(name: '_NewProposalStore');
 
   @override
+  void toggleCreatesSavings() {
+    final _$actionInfo = _$_NewProposalStoreActionController.startAction(
+        name: '_NewProposalStore.toggleCreatesSavings');
+    try {
+      return super.toggleCreatesSavings();
+    } finally {
+      _$_NewProposalStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void toggleCost() {
+    final _$actionInfo = _$_NewProposalStoreActionController.startAction(
+        name: '_NewProposalStore.toggleCost');
+    try {
+      return super.toggleCost();
+    } finally {
+      _$_NewProposalStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void toggleTerm() {
+    final _$actionInfo = _$_NewProposalStoreActionController.startAction(
+        name: '_NewProposalStore.toggleTerm');
+    try {
+      return super.toggleTerm();
+    } finally {
+      _$_NewProposalStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void changeCategory(String category) {
     final _$actionInfo = _$_NewProposalStoreActionController.startAction(
         name: '_NewProposalStore.changeCategory');
@@ -87,7 +165,7 @@ mixin _$NewProposalStore on _NewProposalStore, Store {
   }
 
   @override
-  void removeCost(ProposalRow row) {
+  void removeCost(NecessaryCost row) {
     final _$actionInfo = _$_NewProposalStoreActionController.startAction(
         name: '_NewProposalStore.removeCost');
     try {
@@ -109,7 +187,7 @@ mixin _$NewProposalStore on _NewProposalStore, Store {
   }
 
   @override
-  void removeTerm(ProposalRow row) {
+  void removeTerm(RequiredTerm row) {
     final _$actionInfo = _$_NewProposalStoreActionController.startAction(
         name: '_NewProposalStore.removeTerm');
     try {
@@ -153,19 +231,11 @@ mixin _$NewProposalStore on _NewProposalStore, Store {
   }
 
   @override
-  void saveProposal() {
-    final _$actionInfo = _$_NewProposalStoreActionController.startAction(
-        name: '_NewProposalStore.saveProposal');
-    try {
-      return super.saveProposal();
-    } finally {
-      _$_NewProposalStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
+showCost: ${showCost},
+showTerm: ${showTerm},
+createsSavings: ${createsSavings},
 selectedCategory: ${selectedCategory},
 necessaryCostList: ${necessaryCostList},
 requiredTermList: ${requiredTermList},

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobx_provider/mobx_provider.dart';
 import 'package:rosseti/pages/proposal/mobx/proposal_list_store.dart';
 import 'package:rosseti/pages/proposal/widgets/proposal_list_item.dart';
+import 'package:rosseti/services/injector_service.dart';
 import 'package:rosseti/widgets/loading.dart';
 
 class ProposalListPage extends StatelessWidget {
@@ -11,7 +12,7 @@ class ProposalListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MobxStatefulObserver<ProposalListStore>(
       builder: _scaffold,
-      store: ProposalListStore(),
+      store: InjectorService.getInjector.get<ProposalListStore>(),
       initFunction: (store) => store.init(),
     );
   }
