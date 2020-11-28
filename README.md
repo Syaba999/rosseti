@@ -1,20 +1,46 @@
 # Россети
 
-Клиент информационной системы для организации создания, контроля, ведения реестра рацпредложений ПАО "Россети" в электронном виде. Позволяет сотрудникам создавать рацпредложения, просматривать реестр. Так же имеется механизм общения между сотрудниками, обсуждения общих тем. Для вовлечения пользователей так же используется геймификация процесса работы с приложением.
+Кроссплатформенный клиент информационной системы для организации создания, контроля, ведения реестра рацпредложений ПАО "Россети" в электронном виде. Позволяет сотрудникам создавать рацпредложения, просматривать реестр. Так же имеется механизм общения между сотрудниками, обсуждения общих тем. Для вовлечения пользователей так же используется геймификация процесса работы с приложением.
 
 ## Описание основных каталогов
 
+`lib\api\*`
+GraphQL API клиент для взаимодействия с сервером. Каталоги `mutations` и `queries` содержат в себе описание запросов.
 
+`lib\config\*`
+Конфигурация роутинга и визуальной темы клиента
 
-## Getting Started
+`lib\data\*`
+Объект класса библиотеки `SharedPreferences` для сохранения настроек локально на устройстве
 
-This project is a starting point for a Flutter application.
+`lib\models\*`
+Модели объектов
 
-A few resources to get you started if this is your first Flutter project:
+`lib\pages\*`
+Страницы и виджеты, используемые в приложении. Для управления состоянием используется библиотека `MobX`
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+`lib\services\*`
+Сервисы приложения. `InjectorService` - DI контейнер.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Инструкция по запуску
+Установить Flutter
+https://flutter.dev/docs/get-started/install
+
+Переключить ветку на `dev` и установить дополнительное ПО согласно инстукции
+https://flutter.dev/desktop
+
+В случае запуска на мобильном устройстве, подключить устройство или запустить эмулятор
+
+Далее
+```
+cd <PROJECT_DIR>
+flutter pub get
+flutter run
+```
+
+Для запуска на десктопе
+```
+flutter run -d windows
+flutter run -d macos
+flutter run -d linux
+```
