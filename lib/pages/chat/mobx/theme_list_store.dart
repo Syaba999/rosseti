@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:mobx_provider/mobx_provider.dart';
+import 'package:rosseti/api/requests.dart';
 import 'package:rosseti/config/routes_val.dart';
 import 'package:rosseti/models/chat_theme.dart';
 import 'package:rosseti/models/direction.dart';
@@ -16,14 +17,16 @@ abstract class _ThemeListStore extends MobxBase with Store {
   @override
   void dispose() {}
 
-  Direction _direction;
+  Direction direction;
 
-  void init(Direction direction) {
-    _direction = direction;
+  void init(Direction direction) async {
+    toLoadingState();
+    this.direction = await ApiRequests.fetchDirection(direction.id);
+    toSuccessState();
   }
 
   void addButtonPress() {
-    _navigator.pushNamed(newThemePageRoute, arguments: _direction);
+    _navigator.pushNamed(newThemePageRoute, arguments: direction);
   }
 
   void onThemeTap(ChatTheme theme) {

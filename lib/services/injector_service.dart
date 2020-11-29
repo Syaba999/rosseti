@@ -3,6 +3,7 @@ import 'package:rosseti/api/api_auth_client.dart';
 import 'package:rosseti/api/api_client.dart';
 import 'package:rosseti/data/persistent/persistent_data_source.dart';
 import 'package:rosseti/pages/proposal/mobx/proposal_list_store.dart';
+import 'package:rosseti/services/socket_service.dart';
 import 'package:rosseti/store/user_store.dart';
 
 import 'navigator_service.dart';
@@ -18,6 +19,7 @@ abstract class InjectorService {
     _injector.registerLazySingleton(() => ApiAuthClient.init());
     _injector.registerLazySingleton(() => UserStore());
     _injector.registerLazySingleton(() => ProposalListStore());
+    _injector.registerLazySingleton(() => SocketService());
   }
 
   static void setupNavigator() {

@@ -31,4 +31,9 @@ abstract class _UserStore extends MobxBase with Store {
     final user = await ApiRequests.updateUser(_user.id);
     setUser(user);
   }
+
+  void removeUser() {
+    _prefs.removeUser();
+    _user = null;
+  }
 }

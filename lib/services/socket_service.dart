@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:rosseti/api/urls.dart' as urls;
 import 'package:rosseti/data/persistent/persistent_data_source.dart';
 import 'package:rosseti/store/user_store.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -11,14 +14,14 @@ class SocketService {
   bool get isReady => _socket != null;
 
   void init() {
-    final socketUrl = 'url';
+    final socketUrl = urls.socketUrl;
     print(socketUrl);
     _socket = io(socketUrl, <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
-      'extraHeaders': {'cookie': 'token=;'}
     });
     _socket.connect();
+    _socket.emit("connection");
     _listen();
   }
 
@@ -30,15 +33,21 @@ class SocketService {
     }
   }
 
+  void emit(SocketAction action, dynamic data) {
+    _socket.emit(action.action, jsonEncode(data));
+  }
+
   void _listen() {
+    _socket.onConnect((_) {
+      print('connect');
+      _socket.emit('joined-user', 'test');
+    });
     for (var action in SocketAction.values) {
       _socket.on(action.action, (data) {
         print("${action.action} $data");
       });
-      _socket.on("notification", (data) {
-        print("notification $data");
-      });
     }
+    _socket.on("joined-user", (data) => "print $data");
   }
 
   void connect() {
@@ -51,16 +60,12 @@ class SocketService {
 }
 
 enum SocketAction {
-  new_chat,
-  new_message,
-  read_chat,
-  read_message,
-  notification,
-  new_news,
-  change_set_status,
-  disconnect
+  joined_user,
+  typing,
+  chat,
+  disconnect,
 }
 
 extension _SocketActionExtension on SocketAction {
-  String get action => this.toString().split(".").last;
+  String get action => this.toString().split(".").last.replaceAll("_", "-");
 }

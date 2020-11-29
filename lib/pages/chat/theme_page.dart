@@ -29,15 +29,36 @@ class ThemePage extends StatelessWidget {
     if (store.isLoading) {
       return Loading();
     }
-    return Card(
-      child: Column(
-        children: [
-          Text(store.theme.direction.name),
-          Text(store.theme.title),
-          Text(store.theme.text),
-          Text(store.theme.user.fullName),
-        ],
-      ),
+    return Column(
+      children: [
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              width: double.maxFinite,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(store.theme.direction.name ?? ""),
+                  Text(
+                    store.theme.title,
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  Text(store.theme.text),
+                  Text(
+                    store.theme.user.fullName,
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        RaisedButton(
+          child: Text("Открыть чат"),
+          onPressed: store.openChat,
+        )
+      ],
     );
   }
 }

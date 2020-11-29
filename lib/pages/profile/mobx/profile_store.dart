@@ -23,4 +23,10 @@ abstract class _ProfileStore extends MobxBase with Store {
   void leadersTap() {
     _navigator.pushNamed(leadersPageRoute);
   }
+
+  void logout() {
+    toLoadingState();
+    _userStore.removeUser();
+    _navigator.pushNamedAndRemoveUntil(loginPageRoute, (route) => false);
+  }
 }

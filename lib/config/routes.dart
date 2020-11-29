@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rosseti/config/routes_val.dart';
+import 'package:rosseti/models/chat_theme.dart';
 import 'package:rosseti/models/direction.dart';
+import 'package:rosseti/pages/chat/chat_page.dart';
 import 'package:rosseti/pages/chat/new_theme_page.dart';
 import 'package:rosseti/pages/chat/theme_list_page.dart';
 import 'package:rosseti/pages/chat/theme_page.dart';
@@ -49,6 +51,11 @@ abstract class Routes {
         ));
       case leadersPageRoute:
         return _materialPageRoute(LeaderboardPage());
+      case chatPageRoute:
+        final theme = settings.arguments as ChatTheme;
+        return _materialPageRoute(ChatPage(
+          theme: theme,
+        ));
       default:
         return null;
     }

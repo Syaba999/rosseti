@@ -16,7 +16,7 @@ class LeaderboardPage extends StatelessWidget {
   Widget _scaffold(BuildContext context, LeaderboardStore store) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Доска лидеров"),
+        title: Text("Таблица лидеров"),
       ),
       body: _content(context, store),
     );

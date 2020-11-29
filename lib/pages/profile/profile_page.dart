@@ -70,7 +70,7 @@ class ProfilePage extends StatelessWidget {
             FlatButton.icon(
               label: Text("Выйти"),
               icon: Icon(Icons.exit_to_app),
-              onPressed: () {},
+              onPressed: store.logout,
             )
           ],
         ),

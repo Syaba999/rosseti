@@ -22,7 +22,7 @@ class ThemeListPage extends StatelessWidget {
   Widget _scaffold(BuildContext context, ThemeListStore store) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(direction.name),
+        title: Text(store.direction?.name ?? ""),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: store.addButtonPress,
@@ -36,19 +36,41 @@ class ThemeListPage extends StatelessWidget {
     if (store.isLoading) {
       return Loading();
     }
-    if (direction.themes == null || direction.themes.isEmpty) {
+    if (store.direction.themes == null || store.direction.themes.isEmpty) {
       return Center(
         child: Text("Список тем пуст"),
       );
     }
     return ListView.builder(
-      itemCount: direction.themes.length + 1,
+      itemCount: store.direction.themes.length + 1,
       itemBuilder: (context, index) => index == 0
-          ? Text("Выберите тему:")
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Выберите тему:",
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            )
           : Card(
               child: InkWell(
-                onTap: () => store.onThemeTap(direction.themes[index]),
-                child: Text(direction.themes[index].title),
+                onTap: () =>
+                    store.onThemeTap(store.direction.themes[index - 1]),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        store.direction.themes[index - 1].title ?? "",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        store.direction.themes[index - 1].user.fullName,
+                        style: Theme.of(context).textTheme.caption,
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
     );
