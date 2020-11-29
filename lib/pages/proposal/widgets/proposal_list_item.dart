@@ -60,6 +60,21 @@ class ProposalListItem extends StatelessWidget {
                         .toList(),
                   )),
                 ],
+              ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.thumb_up,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    "${proposal.likes}",
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  )
+                ],
               )
             ],
           ),

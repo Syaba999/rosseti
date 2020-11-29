@@ -7,6 +7,7 @@ import 'package:rosseti/pages/chat/theme_page.dart';
 import 'package:rosseti/pages/home/home_page.dart';
 import 'package:rosseti/pages/loading/loading_page.dart';
 import 'package:rosseti/pages/login/login_page.dart';
+import 'package:rosseti/pages/profile/leaderboard_page.dart';
 import 'package:rosseti/pages/proposal/new_proposal_page.dart';
 import 'package:rosseti/pages/proposal/proposal_page.dart';
 import 'package:rosseti/pages/user/user_info_page.dart';
@@ -46,6 +47,8 @@ abstract class Routes {
         return _materialPageRoute(NewThemePage(
           direction: direction,
         ));
+      case leadersPageRoute:
+        return _materialPageRoute(LeaderboardPage());
       default:
         return null;
     }

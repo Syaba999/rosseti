@@ -3,6 +3,7 @@ import 'package:mobx_provider/mobx_provider.dart';
 import 'package:rosseti/pages/chat/widgets/direction_list.dart';
 import 'package:rosseti/pages/home/mobx/home_store.dart';
 import 'package:rosseti/pages/home/widgets/bottom_navigation.dart';
+import 'package:rosseti/pages/profile/profile_page.dart';
 import 'package:rosseti/pages/proposal/proposal_list_page.dart';
 import 'package:rosseti/widgets/loading.dart';
 
@@ -39,5 +40,6 @@ class HomePage extends StatelessWidget {
   final List<Widget> _pageList = [
     ProposalListPage(),
     DirectionList(),
+    ProfilePage(),
   ];
 }

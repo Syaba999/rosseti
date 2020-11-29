@@ -36,6 +36,7 @@ class ProposalPage extends StatelessWidget {
         children: [
           ProposalInfo(
             proposal: store.proposal,
+            onLike: store.likeProposal,
           ),
           _buildCard(
               context, "Описание проблемы", Text(store.proposal.problemText)),

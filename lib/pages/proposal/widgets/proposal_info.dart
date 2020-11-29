@@ -3,8 +3,9 @@ import 'package:rosseti/models/proposal.dart';
 
 class ProposalInfo extends StatelessWidget {
   final Proposal proposal;
+  final Function() onLike;
 
-  const ProposalInfo({Key key, this.proposal}) : super(key: key);
+  const ProposalInfo({Key key, this.proposal, this.onLike}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -36,6 +37,25 @@ class ProposalInfo extends StatelessWidget {
                 proposal.title,
                 style: Theme.of(context).textTheme.headline6,
               ),
+              SizedBox(height: 8,),
+              InkWell(
+                onTap: onLike,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.thumb_up,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      "${proposal.likes}",
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                    )
+                  ],
+                ),
+              )
             ],
           ),
         ),

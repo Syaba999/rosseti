@@ -18,6 +18,7 @@ class User {
   final String lastName;
   final String middleName;
   final String position;
+  final int rating;
   @JsonKey(unknownEnumValue: UserRole.worker)
   final UserRole role;
 
@@ -33,7 +34,8 @@ class User {
       this.lastName,
       this.middleName,
       this.position,
-      this.role);
+      this.role,
+      this.rating);
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);

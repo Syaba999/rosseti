@@ -21,8 +21,9 @@ abstract class _LoadingStore extends MobxBase with Store {
     final userStore = InjectorService.getInjector.get<UserStore>();
     userStore.init();
     await Future.delayed(Duration(seconds: 2));
+    if (userStore.getUser.id != null) await userStore.updateUser();
     //navigator.popAndPushNamed(homePageRoute);
-    if (userStore.getUser == null) {
+    if (userStore.getUser == null || userStore.getUser.id == null) {
       navigator.popAndPushNamed(loginPageRoute);
     } else {
       navigator.popAndPushNamed(homePageRoute);

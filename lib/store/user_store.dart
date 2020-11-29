@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:mobx_provider/mobx_provider.dart';
+import 'package:rosseti/api/requests.dart';
 import 'package:rosseti/data/persistent/persistent_data_source.dart';
 import 'package:rosseti/models/user.dart';
 import 'package:rosseti/services/injector_service.dart';
@@ -24,5 +25,10 @@ abstract class _UserStore extends MobxBase with Store {
   void setUser(User user) {
     _prefs.setUser(user);
     _user = user;
+  }
+
+  Future<void> updateUser() async {
+    final user = await ApiRequests.updateUser(_user.id);
+    setUser(user);
   }
 }

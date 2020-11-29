@@ -1,6 +1,7 @@
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx_provider/mobx_provider.dart';
+import 'package:rosseti/config/routes_val.dart';
 import 'package:rosseti/pages/proposal/mobx/new_proposal_store.dart';
 import 'package:rosseti/widgets/loading.dart';
 
@@ -33,6 +34,44 @@ class NewProposalPage extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
+          if (store.similarityProposal.isNotEmpty)
+            Card(
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Внимание!",
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    Text(
+                        "Обнаружены похожие предложения, рекомендуется ознакомиться с ними пред продолжением заполнения формы"),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    for (var proposal in store.similarityProposal)
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(proposalPageRoute,
+                              arguments: proposal.id);
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              proposal.title,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Divider(),
+                          ],
+                        ),
+                      )
+                  ],
+                ),
+              ),
+            ),
           Card(
             elevation: 8,
             child: Padding(

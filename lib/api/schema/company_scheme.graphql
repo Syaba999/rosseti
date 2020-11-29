@@ -1,5 +1,0 @@
-type Company {
-  id: ID!
-  title: String
-  number: String
-}

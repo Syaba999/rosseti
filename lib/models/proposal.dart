@@ -1,3 +1,4 @@
+import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:rosseti/models/company.dart';
@@ -8,6 +9,7 @@ import 'category.dart';
 
 part 'proposal.g.dart';
 
+@CopyWith()
 @JsonSerializable()
 class Proposal {
   final String id;
@@ -25,8 +27,10 @@ class Proposal {
   final String title;
   final List<User> users;
   final List<UserRewards> usersRewards;
+  final int likes;
 
   Proposal({
+    this.likes,
     this.id,
     this.number,
     this.createdAt,

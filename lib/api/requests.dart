@@ -1,7 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:graphql/client.dart';
 import 'package:rosseti/api/api_client.dart';
 import 'package:rosseti/api/queries/direction_queries.dart';
 import 'package:rosseti/api/queries/proposal_queries.dart';
+import 'package:rosseti/api/queries/user_queries.dart';
 import 'package:rosseti/models/category.dart';
 import 'package:rosseti/models/chat_theme.dart';
 import 'package:rosseti/models/direction.dart';
@@ -14,6 +16,7 @@ import 'mutations/auth_mutations.dart';
 import 'mutations/proposal_mutations.dart';
 import 'mutations/theme_mutations.dart';
 import 'queries/theme_queries.dart';
+import 'urls.dart';
 
 abstract class ApiRequests {
   static final _apiAuthClient =
@@ -117,6 +120,17 @@ abstract class ApiRequests {
     return Proposal.fromJson(result.data as Map<String, dynamic>);
   }
 
+  static Future<void> likeProposal(String proposalId, String userId) async {
+    final options = MutationOptions(
+        documentNode: gql(likeProposalReq),
+        variables: <String, dynamic>{
+          "proposalId": proposalId,
+          "userId": userId
+        });
+    final result = await _apiClient.mutate(options);
+    print(result.data);
+  }
+
   static Future<List<Direction>> fetchDirectionList() async {
     final options = QueryOptions(documentNode: gql(getDirectionList));
     final result = await _apiClient.query(options);
@@ -195,5 +209,41 @@ abstract class ApiRequests {
     }
     print(result.data);
     return result.data["id"];
+  }
+
+  static Future<List<int>> checkProposal(
+      String title, String problemText) async {
+    final result = await Dio()
+        .post(checkThemeUrl, data: {"title": title, "text": problemText});
+    print(result);
+    return result.data["result"]["proposal_ids"].cast<int>();
+  }
+
+  static Future<User> updateUser(String userId) async {
+    print("USER ID $userId");
+    final options =
+        QueryOptions(documentNode: gql(getUser), variables: <String, dynamic>{
+      'id': userId,
+    });
+    final result = await _apiClient.query(options);
+    if (result.hasException) {
+      print(result.exception.toString());
+      throw result.exception.graphqlErrors
+          .map((e) => e.message.toString())
+          .toList();
+    }
+    return User.fromJson(result.data["user"]);
+  }
+
+  static Future<List<User>> fetchUserList() async {
+    final options = QueryOptions(documentNode: gql(users));
+    final result = await _apiClient.query(options);
+    if (result.hasException) {
+      print(result.exception.toString());
+      throw result.exception.graphqlErrors
+          .map((e) => e.message.toString())
+          .toList();
+    }
+    return (result.data["users"] as List).map((e) => User.fromJson(e)).toList();
   }
 }

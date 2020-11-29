@@ -3,11 +3,56 @@
 part of 'proposal.dart';
 
 // **************************************************************************
+// CopyWithGenerator
+// **************************************************************************
+
+extension ProposalCopyWith on Proposal {
+  Proposal copyWith({
+    Category category,
+    Company company,
+    String createdAt,
+    bool createsSavings,
+    List<Document> documents,
+    String id,
+    int likes,
+    List<NecessaryCost> necessaryCosts,
+    String number,
+    String positiveText,
+    String problemText,
+    List<RequiredTerm> requiredTerms,
+    String solutionText,
+    String title,
+    List<User> users,
+    List<UserRewards> usersRewards,
+  }) {
+    return Proposal(
+      category: category ?? this.category,
+      company: company ?? this.company,
+      createdAt: createdAt ?? this.createdAt,
+      createsSavings: createsSavings ?? this.createsSavings,
+      documents: documents ?? this.documents,
+      id: id ?? this.id,
+      likes: likes ?? this.likes,
+      necessaryCosts: necessaryCosts ?? this.necessaryCosts,
+      number: number ?? this.number,
+      positiveText: positiveText ?? this.positiveText,
+      problemText: problemText ?? this.problemText,
+      requiredTerms: requiredTerms ?? this.requiredTerms,
+      solutionText: solutionText ?? this.solutionText,
+      title: title ?? this.title,
+      users: users ?? this.users,
+      usersRewards: usersRewards ?? this.usersRewards,
+    );
+  }
+}
+
+// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
 Proposal _$ProposalFromJson(Map<String, dynamic> json) {
   return Proposal(
+    likes: json['likes'] as int,
     id: json['id'] as String,
     number: json['number'] as String,
     createdAt: json['createdAt'] as String,
@@ -62,6 +107,7 @@ Map<String, dynamic> _$ProposalToJson(Proposal instance) => <String, dynamic>{
       'title': instance.title,
       'users': instance.users,
       'usersRewards': instance.usersRewards,
+      'likes': instance.likes,
     };
 
 NecessaryCost _$NecessaryCostFromJson(Map<String, dynamic> json) {

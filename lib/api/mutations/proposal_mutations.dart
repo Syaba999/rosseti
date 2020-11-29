@@ -31,3 +31,11 @@ createProposal(
   }
 }
 ''';
+
+const String likeProposalReq = r'''
+mutation LikeProposal($proposalId: ID!, $userId: ID!) {
+  likeProposal(proposalId: $proposalId, userId: $userId) {
+    id
+  }
+}
+''';

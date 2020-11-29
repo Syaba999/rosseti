@@ -2,6 +2,7 @@ const String getProposalList = r'''
 query {
   proposals {
     id
+    likes
     createdAt
     company {
       id
@@ -27,6 +28,7 @@ query GetProposal($id: ID!) {
   proposal(id: $id) {
     id
     createdAt
+    likes
     company {
       id
       name

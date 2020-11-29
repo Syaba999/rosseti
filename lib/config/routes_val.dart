@@ -7,3 +7,4 @@ const String proposalPageRoute = "/proposalPageRoute";
 const String themeListPageRoute = "/themeListPageRoute";
 const String themePageRoute = "/themePageRoute";
 const String newThemePageRoute = "/newThemePageRoute";
+const String leadersPageRoute = "/leadersPageRoute";

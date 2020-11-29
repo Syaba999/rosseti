@@ -54,6 +54,22 @@ mixin _$NewProposalStore on _NewProposalStore, Store {
     });
   }
 
+  final _$similarityProposalAtom =
+      Atom(name: '_NewProposalStore.similarityProposal');
+
+  @override
+  List<Proposal> get similarityProposal {
+    _$similarityProposalAtom.reportRead();
+    return super.similarityProposal;
+  }
+
+  @override
+  set similarityProposal(List<Proposal> value) {
+    _$similarityProposalAtom.reportWrite(value, super.similarityProposal, () {
+      super.similarityProposal = value;
+    });
+  }
+
   final _$selectedCategoryAtom =
       Atom(name: '_NewProposalStore.selectedCategory');
 
@@ -115,6 +131,14 @@ mixin _$NewProposalStore on _NewProposalStore, Store {
     _$usersRewardListAtom.reportWrite(value, super.usersRewardList, () {
       super.usersRewardList = value;
     });
+  }
+
+  final _$_checkProposalAsyncAction =
+      AsyncAction('_NewProposalStore._checkProposal');
+
+  @override
+  Future<void> _checkProposal() {
+    return _$_checkProposalAsyncAction.run(() => super._checkProposal());
   }
 
   final _$_NewProposalStoreActionController =
@@ -236,6 +260,7 @@ mixin _$NewProposalStore on _NewProposalStore, Store {
 showCost: ${showCost},
 showTerm: ${showTerm},
 createsSavings: ${createsSavings},
+similarityProposal: ${similarityProposal},
 selectedCategory: ${selectedCategory},
 necessaryCostList: ${necessaryCostList},
 requiredTermList: ${requiredTermList},

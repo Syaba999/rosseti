@@ -48,6 +48,9 @@ abstract class _NewProposalStore extends MobxBase with Store {
     createsSavings = !createsSavings;
   }
 
+  @observable
+  List<Proposal> similarityProposal = List();
+
   @action
   void toggleCost() => showCost = !showCost;
 
@@ -142,6 +145,37 @@ abstract class _NewProposalStore extends MobxBase with Store {
     }
   }
 
+  _titleListener() {
+    if (titleController.text.length % 5 == 0) {
+      _checkProposal();
+    }
+  }
+
+  _problemTextListener() {
+    if (problemController.text.length % 5 == 0) {
+      _checkProposal();
+    }
+  }
+
+  @action
+  Future<void> _checkProposal() async {
+    if (titleController.text.isNotEmpty && problemController.text.isNotEmpty) {
+      final ids = await ApiRequests.checkProposal(
+          titleController.text, problemController.text);
+      if (ids != null && ids.isNotEmpty) {
+        final proposals = List<Proposal>();
+        for (var id in ids) {
+          final proposal = await ApiRequests.fetchProposal(id.toString());
+          proposals.add(proposal);
+        }
+        similarityProposal = proposals;
+      }
+      if (ids == null || ids.isEmpty) {
+        similarityProposal = List();
+      }
+    }
+  }
+
   void init(String lastId) async {
     toLoadingState();
     this.lastId = lastId;
@@ -156,6 +190,8 @@ abstract class _NewProposalStore extends MobxBase with Store {
     termTextController = TextEditingController();
     rewardNameController = TextEditingController();
     rewardPercentController = TextEditingController();
+    titleController.addListener(_titleListener);
+    problemController.addListener(_problemTextListener);
     try {
       categories = await ApiRequests.fetchCategories();
       toSuccessState();

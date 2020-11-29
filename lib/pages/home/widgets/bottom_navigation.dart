@@ -20,6 +20,10 @@ class BottomNavigation extends StatelessWidget {
           icon: Icon(Entypo.chat),
           label: 'Общение',
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Профиль',
+        ),
       ],
       currentIndex: selectedIndex,
       onTap: onItemTapped,

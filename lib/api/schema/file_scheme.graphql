@@ -1,5 +1,0 @@
-type File {
-  id: ID!
-  type: String
-  file: String
-}
